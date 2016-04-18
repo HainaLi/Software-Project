@@ -1,0 +1,175 @@
+ m = lm(question_score~question_answercount+question_age+question_hascode+question_author_score+viewcount+answer_author_reputation, data=s2)
+> summary(m)
+
+Call:
+lm(formula = question_score ~ question_answercount + question_age + 
+    question_hascode + question_author_score + viewcount + answer_author_reputation, 
+    data = s2)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-218.12   -7.58    4.31   12.96  643.98 
+
+Coefficients:
+                           Estimate Std. Error
+(Intercept)              -7.799e+00  6.472e+00
+question_answercount      7.134e+00  6.123e-01
+question_age             -1.055e-02  2.766e-03
+question_hascode          7.362e-01  3.677e+00
+question_author_score     4.599e-03  1.438e-03
+viewcount                 1.559e-03  4.495e-05
+answer_author_reputation -5.084e-06  1.274e-05
+                         t value Pr(>|t|)    
+(Intercept)               -1.205 0.228608    
+question_answercount      11.651  < 2e-16 ***
+question_age              -3.813 0.000151 ***
+question_hascode           0.200 0.841370    
+question_author_score      3.199 0.001447 ** 
+viewcount                 34.690  < 2e-16 ***
+answer_author_reputation  -0.399 0.689946    
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 44.43 on 621 degrees of freedom
+  (7 observations deleted due to missingness)
+Multiple R-squared:  0.8227,	Adjusted R-squared:  0.8209 
+F-statistic: 480.1 on 6 and 621 DF,  p-value: < 2.2e-16
+
+> vif(m)
+    question_answercount             question_age 
+                1.715798                 1.171702 
+        question_hascode    question_author_score 
+                1.063208                 1.028778 
+               viewcount answer_author_reputation 
+                1.590197                 1.021626 
+> anova(m)
+Analysis of Variance Table
+
+Response: question_score
+                          Df  Sum Sq Mean Sq
+question_answercount       1 3231523 3231523
+question_age               1   43221   43221
+question_hascode           1   32188   32188
+question_author_score      1    1444    1444
+viewcount                  1 2378250 2378250
+answer_author_reputation   1     314     314
+Residuals                621 1225916    1974
+                           F value    Pr(>F)    
+question_answercount     1636.9597 < 2.2e-16 ***
+question_age               21.8942 3.539e-06 ***
+question_hascode           16.3050 6.067e-05 ***
+question_author_score       0.7314    0.3928    
+viewcount                1204.7257 < 2.2e-16 ***
+answer_author_reputation    0.1593    0.6899    
+Residuals                                       
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> m = lm(question_score~log(question_answercount+0.5)+log(question_age+0.5)+question_hascode+log(question_author_score+0.5)+log(viewcount+0.5)+log(answer_author_reputation+0.5), data=s2)
+> summary(m)
+
+Call:
+lm(formula = question_score ~ log(question_answercount + 0.5) + 
+    log(question_age + 0.5) + question_hascode + log(question_author_score + 
+    0.5) + log(viewcount + 0.5) + log(answer_author_reputation + 
+    0.5), data = s2)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-117.31  -35.01   -6.55   22.29  995.27 
+
+Coefficients:
+                                    Estimate
+(Intercept)                           34.509
+log(question_answercount + 0.5)       55.594
+log(question_age + 0.5)              -25.656
+question_hascode                      12.256
+log(question_author_score + 0.5)      -2.543
+log(viewcount + 0.5)                  14.419
+log(answer_author_reputation + 0.5)    1.817
+                                    Std. Error
+(Intercept)                             52.928
+log(question_answercount + 0.5)          6.851
+log(question_age + 0.5)                  7.501
+question_hascode                         7.549
+log(question_author_score + 0.5)         2.786
+log(viewcount + 0.5)                     2.408
+log(answer_author_reputation + 0.5)      1.988
+                                    t value
+(Intercept)                           0.652
+log(question_answercount + 0.5)       8.114
+log(question_age + 0.5)              -3.420
+question_hascode                      1.624
+log(question_author_score + 0.5)     -0.913
+log(viewcount + 0.5)                  5.989
+log(answer_author_reputation + 0.5)   0.914
+                                    Pr(>|t|)    
+(Intercept)                         0.514638    
+log(question_answercount + 0.5)     2.62e-15 ***
+log(question_age + 0.5)             0.000666 ***
+question_hascode                    0.104976    
+log(question_author_score + 0.5)    0.361612    
+log(viewcount + 0.5)                3.58e-09 ***
+log(answer_author_reputation + 0.5) 0.360879    
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 91.43 on 621 degrees of freedom
+  (7 observations deleted due to missingness)
+Multiple R-squared:  0.2491,	Adjusted R-squared:  0.2419 
+F-statistic: 34.34 on 6 and 621 DF,  p-value: < 2.2e-16
+
+> vif(m)
+    log(question_answercount + 0.5) 
+                           1.457120 
+            log(question_age + 0.5) 
+                           1.466197 
+                   question_hascode 
+                           1.058493 
+   log(question_author_score + 0.5) 
+                           1.037284 
+               log(viewcount + 0.5) 
+                           1.759256 
+log(answer_author_reputation + 0.5) 
+                           1.030869 
+> anova(m)
+Analysis of Variance Table
+
+Response: question_score
+                                     Df  Sum Sq
+log(question_answercount + 0.5)       1 1331609
+log(question_age + 0.5)               1   17111
+question_hascode                      1   55975
+log(question_author_score + 0.5)      1   11017
+log(viewcount + 0.5)                  1  299432
+log(answer_author_reputation + 0.5)   1    6988
+Residuals                           621 5190725
+                                    Mean Sq
+log(question_answercount + 0.5)     1331609
+log(question_age + 0.5)               17111
+question_hascode                      55975
+log(question_author_score + 0.5)      11017
+log(viewcount + 0.5)                 299432
+log(answer_author_reputation + 0.5)    6988
+Residuals                              8359
+                                     F value
+log(question_answercount + 0.5)     159.3090
+log(question_age + 0.5)               2.0471
+question_hascode                      6.6966
+log(question_author_score + 0.5)      1.3180
+log(viewcount + 0.5)                 35.8230
+log(answer_author_reputation + 0.5)   0.8361
+Residuals                                   
+                                       Pr(>F)    
+log(question_answercount + 0.5)     < 2.2e-16 ***
+log(question_age + 0.5)              0.152998    
+question_hascode                     0.009886 ** 
+log(question_author_score + 0.5)     0.251387    
+log(viewcount + 0.5)                3.654e-09 ***
+log(answer_author_reputation + 0.5)  0.360879    
+Residuals                                        
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
