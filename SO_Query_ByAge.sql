@@ -1,5 +1,3 @@
-
- 
 SELECT 
 	question.Title AS question_title, 
     question.Body AS question_body, 
@@ -12,6 +10,9 @@ SELECT
 			ELSE 1
 		END as question_hascode,
         datediff(day, question.CreationDate, GETDATE()) as question_age,
+    question.CreationDate AS question_creationdate, 
+    question.DeletionDate AS question_deletiondate, 
+    question_comments.CreationDate AS question_comments,
 	answer.Body AS answer_body,
 	answer.Score AS answer_score,
 	answer.CommentCount AS answer_commentcount,
@@ -23,6 +24,7 @@ SELECT
 	answer_author.Reputation as answer_author_reputation,
 	(answer_author.UpVotes - answer_author.DownVotes) as answer_author_score,
 	answer_author.CreationDate as answer_author_creationdate,
+    
 	question.ViewCount AS viewcount
 	
 FROM 
@@ -37,5 +39,8 @@ INNER JOIN
 INNER JOIN
 	Users AS answer_author
 	ON answer_author.id = answer.OwnerUserId
+INNER JOIN 
+    Comments AS question_comments
+    ON question_comments.postid = question.Id
 WHERE datediff(day, question.CreationDate, GETDATE()) BETWEEN 365 and 700
 ORDER BY datediff(day, question.CreationDate, GETDATE()) ASC
