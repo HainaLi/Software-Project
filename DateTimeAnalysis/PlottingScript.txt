@@ -1,0 +1,4 @@
+> questioncreationtime = strptime(QueryResults_All$question_creationdate,"%Y-%m-%d %H:%M:%S")
+> formattedchosenanswertime = format(questioncreationtime, "%H")
+> formattedquestioncreationtime = format(questioncreationtime, "%H")
+> plot(table(formattedquestioncreationtime), xlab="Time in Hours", ylab="Count")

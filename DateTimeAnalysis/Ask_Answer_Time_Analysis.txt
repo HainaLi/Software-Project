@@ -1,0 +1,80 @@
+(data manipulation omitted)
+> question_answer_diff = as.numeric(difftime(strptime(QueryResults_All$chosenanswer_creationdate,"%Y-%m-%d %H:%M:%S"),
++                     strptime(QueryResults_All$question_creationdate,"%Y-%m-%d %H:%M:%S"), units="secs")) 
+> summary(question_answer_diff)
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+       0      606     2128   290800    17710 32240000 
+> quantile(question_answer_diff,c(.90,.99))
+      90%       99% 
+ 185355.9 8322594.3 
+> quantile(question_answer_diff,c(.8,.90,.99))
+      80%       90%       99% 
+  37482.0  185355.9 8322594.3 
+> quantile(question_answer_diff,c(.7,.8,.90,.99))
+      70%       80%       90%       99% 
+   9868.3   37482.0  185355.9 8322594.3 
+> reg = lm(QueryResults_All$question_score~question_answer_diff+question_answercount+answer_score+question_author_score+question_author_reputation+viewcount+viewcount+question_body_readability+question_title_readability,data=QueryResults_All)
+Error in eval(expr, envir, enclos) : 
+  object 'question_body_readability' not found
+> reg = lm(QueryResults_All$question_score~question_answer_diff+question_answercount+answer_score+question_author_score+question_author_reputation+viewcount+viewcount+question_body_readability,data=QueryResults_All)
+Error in eval(expr, envir, enclos) : 
+  object 'question_body_readability' not found
+> reg = lm(QueryResults_All$question_score~question_answer_diff+question_answercount+answer_score+question_author_score+question_author_reputation+viewcount+viewcount,data=QueryResults_All)
+> summary(reg)
+
+Call:
+lm(formula = QueryResults_All$question_score ~ question_answer_diff + 
+    question_answercount + answer_score + question_author_score + 
+    question_author_reputation + viewcount + viewcount, data = QueryResults_All)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-33.369  -0.748  -0.023   0.598  66.954 
+
+Coefficients:
+                             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                -5.583e-01  1.803e-02 -30.971  < 2e-16 ***
+question_answer_diff        1.200e-07  4.883e-09  24.573  < 2e-16 ***
+question_answercount        1.624e-01  9.708e-03  16.734  < 2e-16 ***
+answer_score                5.790e-01  2.423e-03 238.958  < 2e-16 ***
+question_author_score       6.292e-05  1.659e-05   3.793 0.000149 ***
+question_author_reputation  1.089e-05  1.349e-06   8.071 7.13e-16 ***
+viewcount                   3.547e-04  1.072e-05  33.083  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.006 on 49993 degrees of freedom
+Multiple R-squared:  0.6262,	Adjusted R-squared:  0.6262 
+F-statistic: 1.396e+04 on 6 and 49993 DF,  p-value: < 2.2e-16
+
+> logit = glm(QueryResults_All$question_score~question_answer_diff+question_answercount+answer_score+question_author_score+question_author_reputation+viewcount+viewcount,data=QueryResults_All)
+> summary(logit)
+
+Call:
+glm(formula = QueryResults_All$question_score ~ question_answer_diff + 
+    question_answercount + answer_score + question_author_score + 
+    question_author_reputation + viewcount + viewcount, data = QueryResults_All)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-33.369   -0.748   -0.023    0.598   66.954  
+
+Coefficients:
+                             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                -5.583e-01  1.803e-02 -30.971  < 2e-16 ***
+question_answer_diff        1.200e-07  4.883e-09  24.573  < 2e-16 ***
+question_answercount        1.624e-01  9.708e-03  16.734  < 2e-16 ***
+answer_score                5.790e-01  2.423e-03 238.958  < 2e-16 ***
+question_author_score       6.292e-05  1.659e-05   3.793 0.000149 ***
+question_author_reputation  1.089e-05  1.349e-06   8.071 7.13e-16 ***
+viewcount                   3.547e-04  1.072e-05  33.083  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for gaussian family taken to be 4.022768)
+
+    Null deviance: 538065  on 49999  degrees of freedom
+Residual deviance: 201110  on 49993  degrees of freedom
+AIC: 211501
+
+Number of Fisher Scoring iterations: 2
